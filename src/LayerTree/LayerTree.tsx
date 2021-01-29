@@ -47,6 +47,10 @@ interface DefaultProps extends TreeProps {
    * Compare MDN Docs for Array.prototype.filter: https://mdn.io/array/filter
    */
   filterFunction: (value: any, index: number, array: any[]) => boolean;
+  /**
+   * Allows user to use layer parameter `title` as display name instead of layer parameter `name`
+   */
+  useLayerTitleAsName: boolean;
 }
 
 export interface BaseProps {
@@ -111,7 +115,8 @@ class LayerTree extends React.Component<LayerTreeProps, LayerTreeState> {
   static defaultProps: DefaultProps = {
     draggable: true,
     checkable: true,
-    filterFunction: () => true
+    filterFunction: () => true,
+    useLayerTitleAsName: false
   };
 
   /**
@@ -363,7 +368,7 @@ class LayerTree extends React.Component<LayerTreeProps, LayerTreeState> {
     if (_isFunction(this.props.nodeTitleRenderer)) {
       return this.props.nodeTitleRenderer.call(this, layer);
     } else {
-      return layer.get('name');
+      return this.props.useLayerTitleAsName ? layer.get('title') : layer.get('name');
     }
   }
 
